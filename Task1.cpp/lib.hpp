@@ -41,6 +41,7 @@ class massive {
             // Сначала просто заполняем массив неслучайными числами в диапазоне [min, max]
             for (std::size_t i = 0; i < quantity; i++) {
                 data[i] = min + ((max/quantity) * i);
+
             }
             // Создаём массив, того на сколько каждое число может быть увеличено, чтобы сохранить порядок возрастания
             T *increments = new T[quantity];
@@ -56,7 +57,7 @@ class massive {
             }
         }
 
-        // Метод для проверки, отсортирован ли массив
+        // Метод для проверки, отсортирован ли массив по возрастанию
         bool is_sorted() const {
             for (std::size_t i = 1; i < quantity; i++) {
                 if (data[i] < data[i - 1]) {
@@ -76,19 +77,11 @@ class massive {
         // Метод для сохранения элементов массива в файл
         void save_to_file(const char* filename) {
             std::ofstream file;
-            try {
-                file.exceptions(std::ofstream::failbit | std::ofstream::badbit);
-                file.open(filename);
-                for (std::size_t i = 0; i < quantity; i++) {
-                    file << data[i] << std::endl;
-                }
-                file.close();
-            } catch (const std::exception& e) {
-                std::cerr << "Error saving to file: " << e.what() << std::endl;
-                if (file.is_open()) {
-                    file.close();
-                }
+            file.open(filename);
+            for (std::size_t i = 0; i < quantity; i++) {
+                file << data[i] << std::endl;
             }
+            file.close();
         }
 
         // Деструктор для освобождения выделенной памяти
