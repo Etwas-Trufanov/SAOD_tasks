@@ -1,9 +1,8 @@
 // timer.h
 #pragma once
 #include <chrono>
-#include <functional>
 
-class Timer {
+class TTimer {
 public:
     using Milliseconds = std::chrono::milliseconds::rep;
 
