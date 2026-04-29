@@ -2,25 +2,10 @@
 #include <iostream>
 #include <random>
 #include <limits>
-#include <chrono>
 
-#include "binFind.hpp"
-#include "../Task1/rarray.hpp"
-
-class TTimer {
-public:
-    template<typename Func>
-    static long long measure(Func&& func) {
-        auto start = std::chrono::high_resolution_clock::now();
-
-        func();
-
-        auto end = std::chrono::high_resolution_clock::now();
-
-        return std::chrono::duration_cast<
-            std::chrono::nanoseconds>(end - start).count();
-    }
-};
+#include "find.hpp"
+#include "rarray.hpp"
+#include "time.hpp"
 
 int main() {
     constexpr std::size_t SIZE = 100'000'000;
@@ -42,7 +27,7 @@ int main() {
     for (std::size_t i = 0; i < TESTS; ++i) {
         int64_t foundValue = data[indexDist(gen)];
 
-        auto time = TTimer::measure([=]() {
+        auto time = TTimer::measureNano([=]() {
             volatile std::size_t index =
                 binSearch<int64_t>(data, SIZE, foundValue);
         });
@@ -58,7 +43,7 @@ int main() {
     for (std::size_t i = 0; i < TESTS; ++i) {
         int64_t foundValue = data[indexDist(gen)];
 
-        auto time = TTimer::measure([=]() {
+        auto time = TTimer::measureNano([=]() {
             volatile std::size_t index =
                 linearSearch<int64_t>(data, SIZE, foundValue);
         });
