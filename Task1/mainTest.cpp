@@ -4,11 +4,6 @@
 #include <cassert>
 #include <unistd.h>
 
-// Ваша функция для замера
-void heavy_task() {
-        sleep(5);
-}
-
 int main() {
 
   // Тесты на assertах
@@ -32,23 +27,12 @@ int main() {
 
 
     // Замер лямбды
-    auto time1 = Timer::measure([]() {
+    auto time1 = TTimer::measure([]() {
         sleep(2);
     });
-    std::cout << "Лямбда: " << time1 << " мс\n";
+    std::cout << "Тест лямбды: " << time1 << " мс\n";
 
-    // Замер обычной функции
-    auto time2 = Timer::measure(heavy_task);
-    std::cout << "Функция: " << time2 << " мс\n";
-
-    // Замер с аргументами (если функция их принимает)
-    auto time3 = Timer::measure([](int n) {
-        volatile int sum = 0;
-        for (int i = 0; i < n; ++i) sum += i;
-    }, 1000000);
-    std::cout << "Цикл с аргументом: " << time3 << " мс\n";
-
-    auto time4 = Timer::measure([]() {
+    auto time4 = TTimer::measure([]() {
       int *data = fill_inc_random(100000000, 0, 300000000);
       auto sorted = is_sorted(data, 100000000);
       if (sorted) {

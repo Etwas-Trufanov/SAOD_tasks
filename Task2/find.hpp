@@ -3,7 +3,7 @@
 #include <stdexcept>
 
 // Просто ищем первое совпадение в массиве, применим к неотсортированным массивам
-// T *data - массив, T value - искомое значение, size - размер массива
+// T *data - массив, size - размер массива, T value - искомое значение
 template <typename T>
 requires std::integral<T>
 std::size_t linearSearch(T *data, std::size_t size, T value) {
@@ -15,6 +15,8 @@ std::size_t linearSearch(T *data, std::size_t size, T value) {
     throw std::runtime_error("Has no value in array");
 }
 
+// Бинарный поиск в массиве, применим только к отсортированным массивам
+// T *data - массив, size - размер массива, T value - искомое значение
 template <typename T>
 requires std::integral<T>
 std::size_t binSearch(T *data, std::size_t size, T value) {
