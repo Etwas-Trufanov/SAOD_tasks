@@ -13,7 +13,7 @@ void testLinearSearch() {
     assert(linearSearch(data, 5, 2) == 2);
     assert(linearSearch(data, 5, 1) == 4);
 
-    // Если есть дубликаты — должен вернуть первый индекс
+    // Если есть дубликаты - должен вернуть первый индекс
     int dup[] = {7, 3, 7, 1};
     assert(linearSearch(dup, 4, 7) == 0);
 
