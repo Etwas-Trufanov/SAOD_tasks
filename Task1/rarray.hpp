@@ -3,14 +3,15 @@
 #include <cstdlib>
 #include <fstream>
 #include <iostream>
-#include <random> 
+#include <random>
+#include <vector>
 
 // Шаблон функции для работы с массивами целых чисел
 template <typename T>
 requires std::integral<T>
 // Метод для заполнения массива случайными числами в заданном диапазоне
 T* fill_random(std::size_t input_quantity, T min, T max) {
-    std::random_device rd; 
+    std::random_device rd;
     std::mt19937 gen(rd()); // Инициализация генератора случайных чисел
     std::uniform_int_distribution<> distrib(min, max);
     T* data = new T[input_quantity];
@@ -59,6 +60,57 @@ bool is_sorted(T *data, std::size_t input_quantity) {
     }
     return true;
 }
+
+template<typename T>
+requires std::integral<T>
+std::vector<T> fill_random_vector(std::size_t input_quantity, T min, T max) {
+    std::random_device rd;
+    std::mt19937 gen(rd()); // Инициализация генератора случайных чисел
+    std::uniform_int_distribution<> distrib(min, max);
+    std::vector<T> data(input_quantity);
+    // Генерация случайных чисел в диапазоне [min, max]
+    for (std::size_t i = 0; i < input_quantity; i++) {
+        data[i] = min + distrib(gen) % (max - min + 1);
+    }
+    return data;
+}
+
+template<typename T>
+requires std::integral<T>
+std::vector<T> fill_inc_random_vector(std::size_t input_quantity, T min, T max) {
+    srand(static_cast<unsigned int>(time(nullptr))); // Инициализация генератора случайных чисел
+    std::vector<T> data(input_quantity);
+    // Сначала просто заполняем вектор неслучайными числами в диапазоне [min, max]
+    for (std::size_t i = 0; i < input_quantity; i++) {
+        data[i] = min + ((max - min) / input_quantity) * i;
+    }
+    // Создаём вектор, определяющий, на сколько каждое число может быть увеличено, чтобы сохранить порядок возрастания
+    std::vector<T> increments(input_quantity);
+    increments[input_quantity - 1] = max - data[input_quantity - 1]; // Последний элемент может быть увеличен до max
+    for (std::size_t i = 0; i < input_quantity - 1; i++) {
+        increments[i] = data[i + 1] - data[i];
+    }
+    // Теперь добавляем к каждому элементу вектора случайное число из диапазона [0, increments[i]]
+    for (std::size_t i = 0; i < input_quantity; i++) {
+        if (increments[i] > 0) {
+            data[i] += rand() % (increments[i] + 1);
+        }
+    }
+    return data;
+}
+
+template <typename T>
+requires std::integral<T>
+// Перегруженный метод под вектор для проверки, отсортирован ли вектор по возрастанию
+bool is_sorted(std::vector<T> data) {
+    for (std::size_t i = 1; i < data.size(); i++) {
+        if (data[i] < data[i - 1]) {
+            return false;
+        }
+    }
+    return true;
+}
+
 
 template <typename T>
 requires std::integral<T>

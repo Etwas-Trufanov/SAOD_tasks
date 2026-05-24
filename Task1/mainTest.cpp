@@ -24,6 +24,36 @@ int main() {
     assert(!is_sorted(data, 5));
   }
 
+  // Тесты для векторов
+  {
+    std::vector<int> data = fill_random_vector<int>(5, 1, 10);
+    assert(data.size() == 5);
+    std::cout << "Вектор случайных чисел: ";
+    for (int num : data) {
+      std::cout << num << " ";
+    }
+    std::cout << "\n";
+  }
+  {
+    std::vector<int> data = fill_inc_random_vector<int>(5, 1, 10);
+    assert(data.size() == 5);
+    assert(is_sorted(data));
+    std::cout << "Вектор случайных чисел по возрастанию: ";
+    for (int num : data) {
+      std::cout << num << " ";
+    }
+    std::cout << "\n";
+  }
+  {
+    std::vector<int> data = fill_inc_random_vector<int>(10, 0, 100);
+    assert(data.size() == 10);
+    assert(is_sorted(data));
+    std::cout << "Вектор случайных чисел по возрастанию (10 элементов): ";
+    for (int num : data) {
+      std::cout << num << " ";
+    }
+    std::cout << "\n";
+  }
 
 
     // Замер лямбды

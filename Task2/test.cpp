@@ -1,62 +1,72 @@
 #include <cassert>
 #include <iostream>
-#include <stdexcept>
+#include <vector>
 #include "find.hpp"
 #include "../Task1/rarray.hpp"
 #include "../Task1/time.hpp"
 
 void testLinearSearch() {
-    int data[] = {5, 8, 2, 9, 1};
+    std::vector<int> data = {5, 8, 2, 9, 1};
 
     // Проверка обычного поиска
-    assert(linearSearch(data, 5, 5) == 0);
-    assert(linearSearch(data, 5, 2) == 2);
-    assert(linearSearch(data, 5, 1) == 4);
+    bool ok;
+    assert(linearSearch(data, 5, ok) == 0 && ok);
+    assert(linearSearch(data, 2, ok) == 2 && ok);
+    assert(linearSearch(data, 1, ok) == 4 && ok);
 
     // Если есть дубликаты - должен вернуть первый индекс
-    int dup[] = {7, 3, 7, 1};
-    assert(linearSearch(dup, 4, 7) == 0);
+    std::vector<int> dup = {7, 3, 7, 1};
+    assert(linearSearch(dup, 7, ok) == 0 && ok);
 
-    // Проверка исключения
-    try {
-        linearSearch(data, 5, 100);
-        assert(false);
-    } catch (const std::runtime_error&) {
-    }
+    // Проверка отсутствия значения
+    assert(!linearSearch(data, 100, ok));
 }
 
 void testBinSearch() {
-    int data[] = {1, 3, 5, 7, 9, 11};
+    std::vector<int> data = {1, 3, 5, 7, 9, 11};
 
     // Поиск в отсортированном массиве
-    assert(binSearch(data, 6, 1) == 0);
-    assert(binSearch(data, 6, 7) == 3);
-    assert(binSearch(data, 6, 11) == 5);
+    bool ok;
+    assert(binSearch(data, 1, ok) == 0 && ok);
+    assert(binSearch(data, 7, ok) == 3 && ok);
+    assert(binSearch(data, 11, ok) == 5 && ok);
 
-    // Проверка исключения
-    try {
-        binSearch(data, 6, 4);
-        assert(false);
-    } catch (const std::runtime_error&) {
-    }
+    // Проверка отсутствия значения
+    assert(!binSearch(data, 4, ok));
 
     // Пустой массив
-    try {
-        binSearch(data, 0, 1);
-        assert(false);
-    } catch (const std::runtime_error&) {
-    }
+    std::vector<int> empty;
+    assert(!binSearch(empty, 1, ok));
+}
+
+void testContain() {
+    std::vector<int> data = {5, 8, 2, 9, 1};
+
+    // Проверка наличия элемента
+    assert(contain(data, 5));
+    assert(contain(data, 2));
+    assert(contain(data, 1));
+
+    // Проверка отсутствия элемента
+    assert(!contain(data, 100));
+
+    // Проверка для обычного массива
+    int arr[] = {5, 8, 2, 9, 1};
+    assert(contain(arr, 5, 5));
+    assert(contain(arr, 5, 2));
+    assert(!contain(arr, 5, 100));
 }
 
 int main() {
     testLinearSearch();
     testBinSearch();
+    testContain();
 
     std::cout << "All tests passed!\n";
 
     // Размер массива: 100 миллионов элементов (~800 МБ для int64_t)
     constexpr std::size_t SIZE = 100'000'000;
-    constexpr std::size_t TESTS = 20;  // Количество тестов для усреднения
+    constexpr std::size_t TESTS = 20;  // Кол-во тестов для усреднения
 
     std::random_device rd;
     std::mt19937_64 gen(rd());
@@ -80,8 +90,9 @@ int main() {
 
         // Измеряем время, результат кладём в volatile, чтобы компилятор не выкинул вызов
         auto time = TTimer::measureNano([=]() {
+            bool ok;
             volatile std::size_t index =
-            binSearch<int64_t>(data, SIZE, foundValue);
+            binSearch<int64_t>(data, SIZE, foundValue, ok);
         });
 
         std::cout << "Бинарный поиск: " << time << " ns\n";
@@ -97,8 +108,9 @@ int main() {
         int64_t foundValue = data[indexDist(gen)];
 
         auto time = TTimer::measureNano([=]() {
+            bool ok;
             volatile std::size_t index =
-            linearSearch<int64_t>(data, SIZE, foundValue);
+            linearSearch<int64_t>(data, SIZE, foundValue, ok);
         });
 
         std::cout << "Линейный поиск: " << time << " ns\n";
@@ -112,7 +124,6 @@ int main() {
 
     std::cout << "Среднее время линейного поиска: "
     << linSearchTime << " ns\n";
-
 
 
     delete[] data;
