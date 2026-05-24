@@ -32,6 +32,24 @@ namespace fastsort {
 
 namespace slowSort {
     template<typename T>
+    std::vector<T> shellSort(std::vector<T> array) {
+        auto gap = array.size()/2;
+        while (gap > 0) {
+            for (std::size_t i = gap; i < array.size(); i++) {
+                T tmp = array[i];
+                std::size_t j = i;
+                while (j >= gap && array[j - gap] > tmp) {
+                    array[j] = array[j - gap];
+                    j = j - gap;
+                }
+                array[j] = tmp;
+            }
+            gap /= 2;
+        }
+        return array;
+    }
+
+    template<typename T>
     std::vector<T> bubbleSort(std::vector<T> array) {
         if (array.empty()) {
             return array;

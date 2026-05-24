@@ -100,6 +100,54 @@ void testInsertSortLeftElementLarge() {
     std::cout << "Сортировка вставками: левый элемент большой пройден\n";
 }
 
+void testShellSortEmptyArray() {
+    // Проверяем пустой массив
+    std::vector<int> vec = {};
+    vec = slowSort::shellSort(vec);
+    assert(is_sorted(vec));
+    std::cout << "Сортировка Шелла: пустой массив пройден\n";
+}
+
+void testShellSortSingleElement() {
+    // Проверяем массив из одного элемента
+    std::vector<int> vec = {5};
+    vec = slowSort::shellSort(vec);
+    assert(is_sorted(vec));
+    std::cout << "Сортировка Шелла: массив из одного элемента пройден\n";
+}
+
+void testShellSortSortedArray() {
+    // Проверяем уже отсортированный массив
+    std::vector<int> vec = {1, 2, 3, 4, 5};
+    vec = slowSort::shellSort(vec);
+    assert(is_sorted(vec));
+    std::cout << "Сортировка Шелла: отсортированный массив пройден\n";
+}
+
+void testShellSortNonUniqueElements() {
+    // Проверяем массив с не уникальными элементами
+    std::vector<int> vec = {3, 1, 4, 1, 5, 9, 2, 6, 5};
+    vec = slowSort::shellSort(vec);
+    assert(is_sorted(vec));
+    std::cout << "Сортировка Шелла: не уникальные элементы пройдены\n";
+}
+
+void testShellSortRightElementSmall() {
+    // Проверяем массив, где правый элемент маленький
+    std::vector<int> vec = {1, 2, 3, 4, 5, 6, 7, 0};
+    vec = slowSort::shellSort(vec);
+    assert(is_sorted(vec));
+    std::cout << "Сортировка Шелла: правый элемент маленький пройден\n";
+}
+
+void testShellSortLeftElementLarge() {
+    // Проверяем массив, где левый элемент большой
+    std::vector<int> vec = {20, 1, 2, 3, 4, 5, 6};
+    vec = slowSort::shellSort(vec);
+    assert(is_sorted(vec));
+    std::cout << "Сортировка Шелла: левый элемент большой пройден\n";
+}
+
 int main() {
     // Тесты для сортировки пузырьком
     testBubbleSortEmptyArray();
@@ -116,6 +164,15 @@ int main() {
     testInsertSortNonUniqueElements();
     testInsertSortRightElementSmall();
     testInsertSortLeftElementLarge();
+
+    // Тесты для сортировки Шелла
+    testShellSortEmptyArray();
+    testShellSortSingleElement();
+    testShellSortSortedArray();
+    testShellSortNonUniqueElements();
+    testShellSortRightElementSmall();
+    testShellSortLeftElementLarge();
+
 
     std::cout << "Все тесты пройдены!\n";
     return 0;
