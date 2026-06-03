@@ -9,34 +9,32 @@ void testLinearSearch() {
     std::vector<int> data = {5, 8, 2, 9, 1};
 
     // Проверка обычного поиска
-    bool ok;
-    assert(linearSearch(data, 5, ok) == 0 && ok);
-    assert(linearSearch(data, 2, ok) == 2 && ok);
-    assert(linearSearch(data, 1, ok) == 4 && ok);
+    assert(linearSearch(data, 5) == 0  );
+    assert(linearSearch(data, 2) == 2  );
+    assert(linearSearch(data, 1) == 4  );
 
     // Если есть дубликаты - должен вернуть первый индекс
     std::vector<int> dup = {7, 3, 7, 1};
-    assert(linearSearch(dup, 7, ok) == 0 && ok);
+    assert(linearSearch(dup, 7) == 0);
 
     // Проверка отсутствия значения
-    assert(!linearSearch(data, 100, ok));
+    assert(linearSearch(data, 100) == SIZE_MAX);
 }
 
 void testBinSearch() {
     std::vector<int> data = {1, 3, 5, 7, 9, 11};
 
     // Поиск в отсортированном массиве
-    bool ok;
-    assert(binSearch(data, 1, ok) == 0 && ok);
-    assert(binSearch(data, 7, ok) == 3 && ok);
-    assert(binSearch(data, 11, ok) == 5 && ok);
+    assert(binSearch(data, 1) == 0);
+    assert(binSearch(data, 7) == 3);
+    assert(binSearch(data, 11) == 5);
 
     // Проверка отсутствия значения
-    assert(!binSearch(data, 4, ok));
+    assert(binSearch(data, 4) == SIZE_MAX);
 
     // Пустой массив
     std::vector<int> empty;
-    assert(!binSearch(empty, 1, ok));
+    assert(binSearch(empty, 1) == SIZE_MAX);
 }
 
 void testContain() {
@@ -90,10 +88,9 @@ int main() {
 
         // Измеряем время, результат кладём в volatile, чтобы компилятор не выкинул вызов
         auto time = TTimer::measureNano([=]() {
-            bool ok;
-            volatile std::size_t index =
-            binSearch<int64_t>(data, SIZE, foundValue, ok);
-        });
+                volatile std::size_t index =
+                binSearch<int64_t>(data, SIZE, foundValue);
+            });
 
         std::cout << "Бинарный поиск: " << time << " ns\n";
         binSearchTime += time;
@@ -108,10 +105,9 @@ int main() {
         int64_t foundValue = data[indexDist(gen)];
 
         auto time = TTimer::measureNano([=]() {
-            bool ok;
-            volatile std::size_t index =
-            linearSearch<int64_t>(data, SIZE, foundValue, ok);
-        });
+                volatile std::size_t index =
+                linearSearch<int64_t>(data, SIZE, foundValue);
+            });
 
         std::cout << "Линейный поиск: " << time << " ns\n";
         linSearchTime += time;

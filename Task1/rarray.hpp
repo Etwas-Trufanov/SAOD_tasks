@@ -61,6 +61,31 @@ bool is_sorted(T *data, std::size_t input_quantity) {
     return true;
 }
 
+
+template <typename T>
+requires std::integral<T>
+// Метод для печати элементов массива
+void print(T *data, std::size_t input_quantity) {
+    for (std::size_t i = 0; i < input_quantity; i++) {
+        std::cout << data[i] << std::endl;
+    }
+}
+
+template <typename T>
+requires std::integral<T>
+// Метод для сохранения элементов массива в файл
+void save_to_file(const char* filename, T *data, std::size_t input_quantity) {
+    std::ofstream file;
+    file.open(filename);
+    for (std::size_t i = 0; i < input_quantity; i++) {
+        file << data[i] << std::endl;
+    }
+    file.close();
+}
+
+
+// Перегруженные версии
+
 template<typename T>
 requires std::integral<T>
 std::vector<T> fill_random_vector(std::size_t input_quantity, T min, T max) {
@@ -111,24 +136,11 @@ bool is_sorted(std::vector<T> data) {
     return true;
 }
 
-
 template <typename T>
-requires std::integral<T>
-// Метод для печати элементов массива
-void print(T *data, std::size_t input_quantity) {
-    for (std::size_t i = 0; i < input_quantity; i++) {
-        std::cout << data[i] << std::endl;
+// Перегруженный метод под вектор для проверки, отсортирован ли вектор по возрастанию
+void print(std::vector<T> &data) {
+    for (T i : data) {
+        std::cout << i << " ";
     }
-}
-
-template <typename T>
-requires std::integral<T>
-// Метод для сохранения элементов массива в файл
-void save_to_file(const char* filename, T *data, std::size_t input_quantity) {
-    std::ofstream file;
-    file.open(filename);
-    for (std::size_t i = 0; i < input_quantity; i++) {
-        file << data[i] << std::endl;
-    }
-    file.close();
+    std::cout << "\n";
 }

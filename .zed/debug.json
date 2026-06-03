@@ -1,0 +1,13 @@
+[
+  {
+    "label": "Debug native binary",
+    "build": {
+      "command": "g++",
+      "args": ["-std=c++17", "-g", "-O0", "-o", "prog", "main.cpp"],
+      "cwd": "$ZED_WORKTREE_ROOT",
+    },
+    "program": "$ZED_WORKTREE_ROOT/prog",
+    "request": "launch",
+    "adapter": "CodeLLDB",
+  },
+]

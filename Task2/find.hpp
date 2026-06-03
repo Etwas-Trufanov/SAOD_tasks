@@ -1,5 +1,6 @@
 #include <concepts>
 #include <cstddef>
+#include <cstdint>
 #include <vector>
 
 // Просто ищем первое совпадение в массиве, применим к неотсортированным массивам
@@ -8,22 +9,20 @@
 // макс size_t
 template <typename T>
 requires std::integral<T>
-std::size_t linearSearch(T *data, std::size_t size, T value, bool &ok) {
+std::size_t linearSearch(T *data, std::size_t size, T value) {
     for (std::size_t i = 0; i < size; ++i) {
         if (data[i] == value) {
-            ok = true;
             return i;
         }
     }
-    ok = false;
-    return 0; // Возвращаем 0, если значение не найдено
+    return SIZE_MAX; // Возвращаем 0, если значение не найдено
 }
 
 // Перегрузка для std::vector
 template <typename T>
 requires std::integral<T>
-std::size_t linearSearch(std::vector<T> &data, T value, bool &ok) {
-    return linearSearch(data.data(), data.size(), value, ok);
+std::size_t linearSearch(std::vector<T> &data, T value) {
+    return linearSearch(data.data(), data.size(), value);
 }
 
 // Бинарный поиск в массиве, применим только к отсортированным массивам по возрастанию
@@ -31,10 +30,9 @@ std::size_t linearSearch(std::vector<T> &data, T value, bool &ok) {
 // ok - флаг, указывающий, найдено ли значение
 template <typename T>
 requires std::integral<T>
-std::size_t binSearch(T *data, std::size_t size, T value, bool &ok) {
+std::size_t binSearch(T *data, std::size_t size, T value) {
     if (size == 0) {
-        ok = false;
-        return 0;
+        return SIZE_MAX;
     }
 
     std::size_t left = 0;
@@ -44,7 +42,6 @@ std::size_t binSearch(T *data, std::size_t size, T value, bool &ok) {
         std::size_t mid = left + (right - left) / 2;
 
         if (data[mid] == value) {
-            ok = true;
             return mid;           // найдено
         } else if (data[mid] < value) {
             left = mid + 1;       // ищем в правой половине
@@ -54,28 +51,23 @@ std::size_t binSearch(T *data, std::size_t size, T value, bool &ok) {
     }
 
     // Если цикл завершился — элемент не найден
-    ok = false;
-    return 0;
+    return SIZE_MAX;
 }
 
 // Перегрузка для std::vector
 template <typename T>
 requires std::integral<T>
-std::size_t binSearch(std::vector<T> &data, T value, bool &ok) {
-    return binSearch(data.data(), data.size(), value, ok);
+std::size_t binSearch(std::vector<T> &data, T value) {
+    return binSearch(data.data(), data.size(), value);
 }
 
 template <typename T>
 bool contain(std::vector<T> data, T value) {
-    bool ok;
-    std::size_t index = linearSearch(data.data(), data.size(), value, ok);
-    return ok;
+    return linearSearch(data.data(), data.size(), value) != SIZE_MAX;
 }
 
 // Перегрузка для обычного массива
 template <typename T>
 bool contain(T *data, std::size_t size, T value) {
-    bool ok;
-    std::size_t index = linearSearch(data, size, value, ok);
-    return ok;
+    return linearSearch(data, size, value) != SIZE_MAX;
 }
